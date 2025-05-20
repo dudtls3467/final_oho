@@ -84,4 +84,8 @@ public interface EmployeeMapper {
 	public int deleteEmployeeSchedule(int employeeScheduleNo);
 	///// 스케줄 끝 /////
 
+	public int isRefUser(long empNo, String atrzDocNo);
+
+	public int hasPermission(long empNo, String atrzDocNo);
+
 }

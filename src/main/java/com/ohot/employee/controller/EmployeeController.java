@@ -30,6 +30,7 @@ import com.ohot.employee.vo.AtrzLineVO;
 import com.ohot.employee.vo.AtrzRefVO;
 import com.ohot.employee.vo.DepartmentVO;
 import com.ohot.employee.vo.EmployeeScheduleVO;
+import com.ohot.util.EncryptUtil;
 import com.ohot.vo.CustomUser;
 import com.ohot.vo.EmployeeVO;
 import com.ohot.vo.UsersVO;
@@ -205,11 +206,30 @@ public class EmployeeController {
 			log.warn("페이지 파싱 실패, 기본값 1 사용");
 		}
 	
-		log.info("안담기니? 담기렴" + data);
 		int size = 10;
 	
 		List<DepartmentVO> atrzAllList = this.employeeService.atrzAllList(data);
 		log.info("search->atrzListAjax: " + atrzAllList);
+		
+		for(DepartmentVO dept : atrzAllList) {
+			if(dept.getEmployeeVOList() == null) continue;
+			
+			for(EmployeeVO emp : dept.getEmployeeVOList()) {
+				if(emp.getAtrzDocVOList() == null) continue;
+				
+				for(AtrzDocVO doc : emp.getAtrzDocVOList()) {
+					// 문서 번호 암호화 적용
+					String encrypted = EncryptUtil.encrypt(String.valueOf(doc.getAtrzDocNo()));
+					doc.setEncryptedAtrzDocNo(encrypted);
+					
+					// 참조자인지 여부 체크
+					boolean isRefUser = this.employeeService.isRefUser(empNo, doc.getAtrzDocNo());
+					doc.setRefUser(isRefUser);
+				}
+			}
+			
+		}
+		
 		
 		int total = 0;
 		if (atrzAllList != null && !atrzAllList.isEmpty()) {
@@ -259,11 +279,24 @@ public class EmployeeController {
 			log.warn("페이지 파싱 실패, 기본값 1 사용");
 		}
 	
-		log.info("안담기니? 담기렴" + data);
 		int size = 10;
 	
 		List<DepartmentVO> atrzDocBoxList = this.employeeService.atrzDocBoxList(data);
 		log.info("search->atrzDocBoxList: " + atrzDocBoxList);
+		
+		// 문서 번호 암호화
+		for(DepartmentVO dept : atrzDocBoxList) {
+			if(dept.getEmployeeVOList() == null) continue;
+			
+			for(EmployeeVO emp : dept.getEmployeeVOList()) {
+				if(emp.getAtrzDocVOList() == null) continue;
+				
+				for(AtrzDocVO doc : emp.getAtrzDocVOList()) {
+					String encryptedAtrzDocNo = EncryptUtil.encrypt(doc.getAtrzDocNo());
+					doc.setEncryptedAtrzDocNo(encryptedAtrzDocNo);
+				}
+			}
+		}
 		
 		int total = 0;
 		if (atrzDocBoxList != null && !atrzDocBoxList.isEmpty()) {
@@ -323,9 +356,9 @@ public class EmployeeController {
 		return atrzDocNo;
 	}
 	
-	@GetMapping("/atrzDocDetail")
+	@PostMapping("/atrzDocDetail")
 	public String atrzDocDetail(
-			@RequestParam(value="atrzDocNo") String atrzDocNo
+			@RequestParam(value="atrzDocNo") String encryptedAtrzDocNo
 			, Model model
 			, @AuthenticationPrincipal CustomUser customUser) {
 		
@@ -334,6 +367,17 @@ public class EmployeeController {
 		long empNo = usersVO.getUserNo();
 		
 		log.info("atrzDocDetail->empNo : " + empNo);
+		
+		// 복호화
+		String atrzDocNo = EncryptUtil.decrypt(encryptedAtrzDocNo);
+		
+		// 문서 접근권한 체크
+		boolean hasPermission = this.employeeService.hasPermission(empNo, atrzDocNo);
+		
+		if(!hasPermission) {
+			log.warn("권한 없음 : empNo={}, docNo={}", empNo, atrzDocNo);
+			return "error/403";
+		}
 		
 		DepartmentVO atrzDocVODetail = this.employeeService.atrzDocDetail(atrzDocNo);
 		List<DepartmentVO> atrzRefVOList = this.employeeService.atrzRefDetail(atrzDocNo);
@@ -375,9 +419,12 @@ public class EmployeeController {
 		
 		log.info("updateRefRead=>atrzRefVO", atrzRefVO);
 		
+		String atrzDocNo = EncryptUtil.decrypt(atrzRefVO.getAtrzDocNo());
+		atrzRefVO.setAtrzDocNo(atrzDocNo);
+		
 		int result = this.employeeService.updateRefIdntyYn(atrzRefVO);
 		
-		return atrzRefVO.getAtrzDocNo();
+		return EncryptUtil.encrypt(String.valueOf(atrzRefVO.getAtrzDocNo()));
 	}
 	
 	

@@ -46,4 +46,10 @@ public class AtrzDocVO {
 	
 	//문서양식이름
 	private String docFrmNm;
+	
+	// 암호화 문서번호
+	private String encryptedAtrzDocNo;
+	
+	// 참조자인지 여부 체크
+	private boolean refUser;
 }

@@ -114,7 +114,9 @@ function renderTable(data) {
 	            <td>${doc.drftYmd}</td>
 	            <td>${doc.ddlnYmd ? doc.ddlnYmd : '-'}</td>
 	            <td>${doc.emrgYn === 'Y' ? '<span class="badge bg-danger-subtle text-danger border border-danger">긴급</span>' : '-'}</td>
-	            <td id="tdtitle" class="text-start"><a href="#" class="ref-doc-link" data-atrz-doc-no="${doc.atrzDocNo}">${doc.drftTtl}</a></td>
+	            <td id="tdtitle" class="text-start">
+					<a href="#" class="ref-doc-link" data-atrz-doc-no="${doc.encryptedAtrzDocNo}" data-is-ref-user="${doc.refUser}" >${doc.drftTtl}</a>
+				</td>
 	            <td>${doc.docFrmNm}</td>
 	            <td>${doc.fileGroupNo ? '<i class="bi bi-paperclip"></i>' :  '-'}</td>
 	            <td>${emp.empNm} ${emp.position} / ${dept.deptNm}</td>

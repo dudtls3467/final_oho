@@ -112,7 +112,28 @@ td, th {
         <%@ include file="../footer.jsp"%>
     </main>
     
-     
+<script type="text/javascript">
+	document.addEventListener("click", function(e){
+		if(e.target.classList.contains("docLink")){
+			e.preventDefault();
+
+			const atrzDocNo = e.target.dataset.atrzDocNo;
+			
+			const form = document.createElement("form");
+			form.method = "POST";
+			form.action = "/emp/atrzDocDetail";
+
+			const input = document.createElement("input");
+			input.type = "hidden";
+			input.name = "atrzDocNo";
+			input.value = atrzDocNo;
+
+			form.appendChild(input);
+			document.body.appendChild(form);
+			form.submit();
+		}
+	})
+</script>     
 
 <script src="/js/employee/atrzDocBox.js"></script>
 </body>

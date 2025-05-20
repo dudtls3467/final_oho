@@ -59,4 +59,8 @@ public interface EmployeeService {
 	public int deleteEmployeeSchedule(int employeeScheduleNo); 
 	///// 스케줄 끝 /////
 
+	public boolean isRefUser(long empNo, String atrzDocNo);
+
+	public boolean hasPermission(long empNo, String atrzDocNo);
+
 }

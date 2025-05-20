@@ -1314,4 +1314,24 @@
 	</update>
 	<!-- ///// 스케줄 끝 ///// -->
 	
+	<select id="isRefUser" resultType="int">
+	/* com.ohot.employee.mapper.EmployeeMapper.isRefUser */
+		SELECT COUNT(*)
+		  FROM atrz_ref
+		 WHERE ref_emp_no = #{empNo}
+		   AND atrz_doc_no = #{atrzDocNo}
+	</select>
+	
+	<select id="hasPermission" resultType="int">
+	/* com.ohot.employee.mapper.EmployeeMapper.hasPermission */
+		SELECT COUNT(*)
+		  FROM atrz_doc ad
+		  LEFT OUTER JOIN atrz_line al ON(ad.atrz_doc_no = al.atrz_doc_no)
+		  LEFT OUTER JOIN atrz_ref ar ON(ar.atrz_doc_no = al.atrz_doc_no)
+		 WHERE ad.atrz_doc_no = #{atrzDocNo}
+		   AND (ad.drft_emp_no = #{empNo}
+		        OR al.atrz_emp_no = #{empNo}
+		        OR ar.ref_emp_no = #{empNo})
+	</select>
+	
 </mapper>

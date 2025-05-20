@@ -166,30 +166,54 @@ td, th {
 	    const atrzDocNo = e.target.dataset.atrzDocNo;
 	    const refEmpNo = empNo; 
 
-	    const data = {
-	      refEmpNo: empNo,
-	      atrzDocNo: atrzDocNo
-	    };
-
-	    fetch('/emp/updateRefRead', {
-	      method: "POST",
-	      headers: {
-	        "Content-Type": "application/json"
-	      },
-	      body: JSON.stringify(data)
-	    })
-	    .then(resp => resp.text())
-	    .then(data => {
-	      console.log("참조 읽음 처리 완료", data);
-	      
-	      window.location.href = "/emp/atrzDocDetail?atrzDocNo=" + data;
-	    })
-	    .catch(err => {
-	      console.error("참조 읽음 실패", err);
-	    });
+	    const isRefUser = e.target.dataset.isRefUser === 'true';
+	    
+	    if(isRefUser){
+		    const data = {
+		      refEmpNo: empNo,
+		      atrzDocNo: atrzDocNo
+		    };
+		    
+		    fetch('/emp/updateRefRead', {
+		      method: "POST",
+		      headers: {
+		        "Content-Type": "application/json"
+		      },
+		      body: JSON.stringify(data)
+		    })
+		    .then(resp => resp.text())
+		    .then(data => {
+		      console.log("참조 읽음 처리 완료", data);
+		      
+			  postToAtrzDocDetail(atrzDocNo);
+		      //window.location.href = "/emp/atrzDocDetail?atrzDocNo=" + encodeURIComponent(data);
+		    })
+		    .catch(err => {
+		      console.error("참조 읽음 실패", err);
+		    });
+		    	    	
+	    }else{
+	    	//window.location.href = "/emp/atrzDocDetail?atrzDocNo=" + encodeURIComponent(atrzDocNo);
+			postToAtrzDocDetail(atrzDocNo);
+	    }
+	    
 	  }
 	});
-    	
+    
+	function postToAtrzDocDetail(encryptedDocNo){
+		const form = document.createElement("form");
+		form.method = "POST";
+		form.action = "/emp/atrzDocDetail";
+
+		const input = document.createElement("input");
+		input.type = "hidden";
+		input.name = "atrzDocNo";
+		input.value = encryptedDocNo;
+
+		form.appendChild(input);
+		document.body.appendChild(form);
+		form.submit();
+	}
     	
     </script>  
 <script src="/js/employee/atrzList.js"></script>

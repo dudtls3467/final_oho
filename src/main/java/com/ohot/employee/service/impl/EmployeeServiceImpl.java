@@ -375,4 +375,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	///// 스케줄 끝 /////
 
+	@Override
+	public boolean isRefUser(long empNo, String atrzDocNo) {
+		return this.employeeMapper.isRefUser(empNo, atrzDocNo) > 0;
+	}
+
+	@Override
+	public boolean hasPermission(long empNo, String atrzDocNo) {
+		return this.employeeMapper.hasPermission(empNo, atrzDocNo) > 0;
+	}
+
 }

@@ -112,7 +112,9 @@ function renderTable(data) {
 	            <td>${doc.ddlnYmd ? doc.ddlnYmd : '-'}</td>
 	            <td>${doc.docFrmNm}</td>
 	            <td>${doc.emrgYn === 'Y' ? '<span class="badge bg-danger-subtle text-danger border border-danger">긴급</span>' : '-'}</td>
-	            <td id="tdtitle" class="text-start"><a href="/emp/atrzDocDetail?atrzDocNo=${doc.atrzDocNo}">${doc.drftTtl}</a></td>
+	            <td id="tdtitle" class="text-start">
+					<a href="#" class="docLink" data-atrz-doc-no="${doc.encryptedAtrzDocNo}">${doc.drftTtl}</a>
+				</td>
 	            <td>${doc.fileGroupNo ? '<i class="bi bi-paperclip"></i>' : '-'}</td>
 	            <td>${emp.empNm} ${emp.position} / ${dept.deptNm}</td>
 	            <td>${doc.atrzDocNo}</td>
