@@ -1,4 +1,4 @@
-# 최종 프로젝트 - OHOT Fannect CMS(팬소통 커뮤니티관리 시스템)
+# 최종 프로젝트 : Fannect CMS - oHot(엔터테인먼트 관리시스템)
 ## 목차
 1. 주제선정 배경
 2. 팀 소개
@@ -29,13 +29,16 @@
 
 ## :three: 개발 환경
 | 분류 | 개발 환경 |  
-| ---- | --------------|
-| 서버 | |
+| ---------------------- | -------------------|
+| 운영체제 | Windows 10, 11 64bit |
+| 개발도구 | sts4(Eclipse), ERDCloud, Vs code, Maven, SQL devloper |
+| 개발언어 | Java, JavaScript, JSP, XML, CSS3, HTML5 | 
 | 형상 관리 | SVN |
 | WAS | Apache Tomcat 10.1 |
+| DB & ORM | Oracle, Mybatis | 
 | 프레임 워크 | BootStrap, Spring |
-| 오픈 소스 | |
-
+| 오픈 소스 | Jquery, JSTL, Full Calendar, CKEditor, Google Cloud Translation, Html2PDF, Toss Payments, Sortable, Web Socket, ChartJS, Apache POI, jsTree, 카카오지도, 카카오로그인, Spotify |
+| 기타 툴 | livekit-server, Node.js, HLS, docker |
 ## :four: 주요기능
 
 
